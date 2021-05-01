@@ -10,6 +10,28 @@
 
 @implementation TJButton {
     NSMutableDictionary<NSNumber *, UIColor *> *_backgroundColorsForStates;
+    NSMutableDictionary<NSNumber *, UIColor *> *_tintColorsForStates;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        [self _commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    if (self = [super initWithCoder:coder]) {
+        [self _commonInit];
+    }
+    return self;
+}
+
+- (void)_commonInit
+{
+    _hitOutsets = UIEdgeInsetsZero;
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor
@@ -23,34 +45,64 @@
         _backgroundColorsForStates = [NSMutableDictionary new];
     }
     _backgroundColorsForStates[@(state)] = backgroundColor;
-    [self _updateBackgroundColor];
+    [self _updateForState];
+}
+
+- (void)setTintColor:(UIColor *)tintColor
+{
+    [self setTintColor:tintColor forState:UIControlStateNormal];
+}
+
+- (void)setTintColor:(UIColor *)backgroundColor forState:(UIControlState)state
+{
+    if (!_tintColorsForStates) {
+        _tintColorsForStates = [NSMutableDictionary new];
+    }
+    _tintColorsForStates[@(state)] = backgroundColor;
+    [self _updateForState];
 }
 
 - (void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
-    [self _updateBackgroundColor];
+    [self _updateForState];
 }
 
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    [self _updateBackgroundColor];
+    [self _updateForState];
 }
 
 - (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
-    [self _updateBackgroundColor];
+    [self _updateForState];
 }
 
-- (void)_updateBackgroundColor {
+- (void)_updateForState {
     const UIControlState state = self.state;
-    UIColor *color = _backgroundColorsForStates[@(state)];
-    if (!color && state != UIControlStateNormal) {
-        color = _backgroundColorsForStates[@(UIControlStateNormal)];
+    NSNumber *const stateKey = @(self.state);
+    
+    // Background color
+    UIColor *backgroundColor = _backgroundColorsForStates[stateKey];
+    if (!backgroundColor && state != UIControlStateNormal) {
+        backgroundColor = _backgroundColorsForStates[@(UIControlStateNormal)];
     }
-    [super setBackgroundColor:color];
+    [super setBackgroundColor:backgroundColor];
+    
+    // Tint color
+    UIColor *tintColor = _tintColorsForStates[stateKey];
+    if (!tintColor && state != UIControlStateNormal) {
+        tintColor = _tintColorsForStates[@(UIControlStateNormal)];
+    }
+    [super setTintColor:tintColor];
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+    return [super pointInside:point withEvent:event] ||
+    CGRectContainsPoint(UIEdgeInsetsInsetRect(self.bounds, UIEdgeInsetsMake(-_hitOutsets.top, -_hitOutsets.left, -_hitOutsets.bottom, -_hitOutsets.right)), point);
 }
 
 @end

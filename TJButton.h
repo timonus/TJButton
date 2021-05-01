@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TJButton : UIButton
 
 - (void)setBackgroundColor:(nullable UIColor *)backgroundColor forState:(UIControlState)state;
+- (void)setTintColor:(nullable UIColor *)backgroundColor forState:(UIControlState)state;
+
+@property (nonatomic) UIEdgeInsets hitOutsets;
 
 @end
 
