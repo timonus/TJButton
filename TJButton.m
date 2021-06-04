@@ -114,7 +114,10 @@
                  borderColor:(const CGColorRef)borderColor
 {
     self.layer.cornerRadius = cornerRadius;
-    if (@available(iOS 13.0, *)) {
+#if !defined(__IPHONE_13_0) || __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_13_0
+    if (@available(iOS 13.0, *))
+#endif
+    {
         self.layer.cornerCurve = kCACornerCurveContinuous;
     }
     self.layer.borderWidth = borderWidth;
