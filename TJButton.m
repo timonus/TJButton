@@ -107,6 +107,7 @@
 
 @end
 
+__attribute__((objc_direct_members))
 @implementation UIView (TJButtonAdditions)
 
 - (void)tj_applyCornerRadius:(const CGFloat)cornerRadius
