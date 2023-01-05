@@ -13,27 +13,6 @@
     NSMutableDictionary<NSNumber *, UIColor *> *_tintColorsForStates;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    if (self = [super initWithFrame:frame]) {
-        [self _commonInit];
-    }
-    return self;
-}
-
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
-    if (self = [super initWithCoder:coder]) {
-        [self _commonInit];
-    }
-    return self;
-}
-
-- (void)_commonInit
-{
-    _hitOutsets = UIEdgeInsetsZero;
-}
-
 - (void)setBackgroundColor:(UIColor *)backgroundColor
 {
     [self setBackgroundColor:backgroundColor forState:UIControlStateNormal];
