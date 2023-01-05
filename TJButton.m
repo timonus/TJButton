@@ -59,7 +59,8 @@
     [self _updateForState];
 }
 
-- (void)_updateForState {
+- (void)_updateForState __attribute__((objc_direct))
+{
     const UIControlState state = self.state;
     NSNumber *const stateKey = @(self.state);
     
