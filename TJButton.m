@@ -13,6 +13,8 @@
     NSMutableDictionary<NSNumber *, UIColor *> *_tintColorsForStates;
 }
 
+@dynamic titleEdgeInsets;
+
 - (void)setBackgroundColor:(UIColor *)backgroundColor
 {
     [self setBackgroundColor:backgroundColor forState:UIControlStateNormal];

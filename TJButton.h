@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) UIEdgeInsets hitOutsets;
 
+// Marked as deprecated by UIKit in iOS 15, this un-marks it as deprecated.
+@property (nonatomic) UIEdgeInsets titleEdgeInsets;
+
 @end
 
 @interface UIView (TJButtonAdditions)
