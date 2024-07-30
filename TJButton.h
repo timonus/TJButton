@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)tj_applyCornerRadius:(const CGFloat)cornerRadius
                  borderWidth:(const CGFloat)borderWidth
-                 borderColor:(const CGColorRef)borderColor;
+                 borderColor:(nullable const CGColorRef)borderColor;
 
 @end
 
