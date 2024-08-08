@@ -7,6 +7,7 @@
 //
 
 #import "TJButton.h"
+#import <objc/runtime.h>
 
 @implementation TJButton {
     NSMutableDictionary<NSNumber *, UIColor *> *_backgroundColorsForStates;
@@ -94,7 +95,7 @@ __attribute__((objc_direct_members))
 
 - (void)tj_applyCornerRadius:(const CGFloat)cornerRadius
                  borderWidth:(const CGFloat)borderWidth
-                 borderColor:(const CGColorRef)borderColor
+                 borderColor:(UIColor *const)borderColor
 {
     self.layer.cornerRadius = cornerRadius;
 #if !defined(__IPHONE_13_0) || __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_13_0
@@ -104,7 +105,33 @@ __attribute__((objc_direct_members))
         self.layer.cornerCurve = kCACornerCurveContinuous;
     }
     self.layer.borderWidth = borderWidth;
-    self.layer.borderColor = borderColor;
+    self.borderColor = borderColor;
+}
+
+- (void)setBorderColor:(UIColor *)color
+{
+    if (@available(iOS 17.0, *)) {
+        id<UITraitChangeRegistration> formerRegistration = objc_getAssociatedObject(self, @selector(borderColor));
+        if (formerRegistration) {
+            [self unregisterForTraitChanges:formerRegistration];
+        }
+        if (color) {
+            id registration = [self registerForTraitChanges:@[[UITraitUserInterfaceStyle class]] withHandler:^(__kindof id<UITraitEnvironment>  _Nonnull traitEnvironment, UITraitCollection * _Nonnull previousCollection) {
+                [[(UIView *)traitEnvironment layer] setBorderColor:color.CGColor];
+            }];
+            objc_setAssociatedObject(self, @selector(borderColor), registration, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        }
+    }
+    self.layer.borderColor = color.CGColor;
+}
+
+- (UIColor *)borderColor
+{
+    CGColorRef borderColor = self.layer.borderColor;
+    if (borderColor) {
+        return [UIColor colorWithCGColor:borderColor];
+    }
+    return nil;
 }
 
 @end

@@ -26,7 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)tj_applyCornerRadius:(const CGFloat)cornerRadius
                  borderWidth:(const CGFloat)borderWidth
-                 borderColor:(nullable const CGColorRef)borderColor;
+                 borderColor:(nullable UIColor *const)borderColor; // Updates automatically in response to theme changes on iOS 17+
+
+@property (nonatomic, nullable) UIColor *borderColor; // Updates automatically in response to theme changes on iOS 17+
 
 @end
 
